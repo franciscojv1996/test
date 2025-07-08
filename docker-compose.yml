@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  test-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: test-backend-cont
+    ports:
+      - "3030:3030"
+    environment:
+      BD_HOST: mysql-db
+      BD_USER: fran
+      BD_PASSWORD: fran123
+      BD_NAME: testdb    
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - mysql-db
+    restart: always
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: fran
+      MYSQL_PASSWORD: fran123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql-db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: admin123
+    depends_on:
+      - mysql-db
+
+volumes:
+  mysql_data:

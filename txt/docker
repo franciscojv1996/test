@@ -1,0 +1,29 @@
+comando para iniciar docket
+docker exec -it <container_id >/bin/bash
+docker exec -it testBacken /bin/bash
+
+docker exec -it test-backend-cont /bin/bash
+
+// cuando se instale por primera vez o se instalen dependencias
+
+docker-compose up --build -d
+
+// Solo iniciar el contenedor
+
+docker-compose up -d
+
+// Apagar el contenedor
+
+docker-compose down
+
+// Apagar y eliminar la data
+
+docker-compose down -v
+
+// Iniciar el bash de los contenedores
+
+docker exec -it <container_id >/bin/bash
+
+// Para el bash de gsh-backend
+
+docker exec -it gsh-backend-cont /bin/bash
