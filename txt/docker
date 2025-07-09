@@ -1,29 +1,94 @@
-comando para iniciar docket
-docker exec -it <container_id >/bin/bash
-docker exec -it testBacken /bin/bash
+Docker
+--comando 
+    basicos:
+    > sudo docker -t nombre_imagen .
+        -Crea la imagen de Docker la opccion -t indica el nombre de la imagen
+    
+    >sudo docker run nombre_imagen
+        -Correo la imagen de Docker
 
-docker exec -it test-backend-cont /bin/bash
+    >sudo docker image ls
+        -Lista las imagenes de Docker
 
-// cuando se instale por primera vez o se instalen dependencias
+    >sudo docker ps -a 
+        -Lista los contenedores exitentes 
 
-docker-compose up --build -d
+    >sudo docker image rm nombre_imagen
+        -Elimina la imagen de Docker
 
-// Solo iniciar el contenedor
+    >sudo docker image -a -q
+        -Elimina toda las imagenes de Docker
 
-docker-compose up -d
+    >sudo stop nombre_contenedor
+        -Detiene el contenedor de Docker
 
-// Apagar el contenedor
+    >sudo docker ps -a -q
+        -Detener todos los contenedores de Docker
 
-docker-compose down
+    >sudo docker rm nombre_contenedor
+        -Elimina el contenedor de Docker solo si esta detenido 
 
-// Apagar y eliminar la data
+    >sudo docker ps -a -q 
+        -Elimina todos los contenedores de Docker solo si estan detenidos
+    
+    sudo docker logs nombre_contenedor
+        -Muestra los logs del contenedor de Docker
+    
+--comando espesificos de Docker y Docker_Compose
+    imagenes y contenedores(Docker cli)
+    >sudo docker image
+        -Lista las imagenes de Docker
 
-docker-compose down -v
+    >sudo docker ps
+        -lista de los contenedores corriendo
 
-// Iniciar el bash de los contenedores
+    >sudo docker ps -a
+        -Lista todos los contenedores incluyendo los detenidos
+    
+    >sudo docker buid -t nombre_contenedor .
+        -Crea una imagen de Docker a partir de un Dockerfile
 
-docker exec -it <container_id >/bin/bash
+    >sudo docker run -d -p puerto_host:puerto_contenedor nombre_contenedor
+    ej:sudo docker run -d -p 8080:80 nginx
+        -ejecutar un contenedor desde la imagen
 
-// Para el bash de gsh-backend
+    >sudo docker logs nombre o id del contenedor 
+        -Muestra los logs del contenedor
+    
+    >sudo docker exec -it nombre_contenedor bash
+        -Accede al contenedor en ejecucion
 
-docker exec -it gsh-backend-cont /bin/bash
+    Con Docker Compose
+    >sudo docker-compose up -d --build
+        -Iniciar todo en segundo plano 
+    
+    >sudo docker-compose logs -f
+        -Muestra los logs de todos los contenedores
+
+    >sudo docker docker-compose down
+        -Detiene y elimina todos los contenedores, sin borror volumenes
+
+    >sudo docker-compose down --volumes
+        -Detiene y elimina todos los contenedores y volumenes
+
+    otros comamndo usados en la prectica 
+    >sudo docker ps -a --filter ancestor=nombre_image
+        -se verifica que el contenedor esta usando una imagen
+
+    >sudo docker -it id_contnedor ||nombre_contenedor .bin/bash
+        -iniciar el bash del contenedor 
+    
+    iniciar contenedor de base de datos desde el bash
+    *MySQL
+    >sudo docker exec -it mysql-bd mysql -u root -p
+        - mysql-db: nombre del contenedor que se ejecuta
+        - mysql: comando a ejecutar dentro del contenedor, el cliente Mysql
+        - -u root: usuario de la base de datos
+        - -p: solicita la contraseña del usuario
+    
+    otra forma de iniciar el contenedor de base de datos
+    >sudo docker exec -it mysql-bd bash
+    >mysql -u root -p
+        -Accede al contenedor de MySQL y luego ejecutar el comando mysql -u root -p 
+
+    
