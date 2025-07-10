@@ -92,3 +92,22 @@ Docker
         -Accede al contenedor de MySQL y luego ejecutar el comando mysql -u root -p 
 
     
+
+    Comando otrogados pro Romel
+    >docker-compose up --build -d
+        cuando se instale por primera vez o se instalen dependencias 
+    
+    >docker-compose up -d
+        Solo iniciar el contenedor
+
+    >docker-compose down
+        Apagar el contenedor
+
+    >docker-compose down -v
+        Apagar y eliminar la data
+    
+    >docker exec -it <container_id> /bin/bash
+        Iniciar el bash de los contenedores
+        
+    >docker exec -it gsh-backend-cont /bin/bash
+        Para el bash de gsh-backend

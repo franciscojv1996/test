@@ -1,10 +1,10 @@
 version: '3.8'
 services:
-  test-backend:
+  backend:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: test-backend-cont
+    container_name: test-backend
     ports:
       - "3030:3030"
     environment:
@@ -12,6 +12,8 @@ services:
       BD_USER: fran
       BD_PASSWORD: fran123
       BD_NAME: testdb    
+    networks:
+      - test-network
     volumes:
       - .:/usr/src/app
     depends_on:
@@ -21,6 +23,7 @@ services:
   mysql-db:
     image: mysql:8.0
     container_name: mysql-db
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: admin123
       MYSQL_DATABASE: testdb
@@ -30,6 +33,8 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - test-network
   
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -44,6 +49,13 @@ services:
       PMA_PASSWORD: admin123
     depends_on:
       - mysql-db
+    networks:
+      - test-network
 
 volumes:
   mysql_data:
+
+networks:
+  test-network:
+    name: test-network
+    driver: bridge

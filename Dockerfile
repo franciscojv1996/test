@@ -17,4 +17,4 @@ COPY  . .
 EXPOSE 3030
 
 #Comando de arranque
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
