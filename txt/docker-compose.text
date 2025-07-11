@@ -1,0 +1,82 @@
+version: '3.8' >> version del archivo 
+services: >> bloque del servicio 
+  backend:
+    build:
+      context: . >>  Usa el directorio actual como contexto para construir la imagen
+      dockerfile: Dockerfile >>  Usa el archivo Dockerfile del proyecto para construir la imagen personalizada del backend.
+    container_name: test-backend >> Le da un nombre fijo al contenedor para facilitar su identificación.
+    ports: >> Mapea el puerto 3030 del contenedor al 3030 de tu máquina para que puedas acceder a tu app desde el navegador (localhost:3030).
+      - "3030:3030"
+    environment: >> Define variables de entorno que tu aplicación puede usar para conectarse a la base de datos.
+      BD_HOST: mysql-db
+      BD_USER: fran
+      BD_PASSWORD: fran123
+      BD_NAME: testdb    
+    networks: >> Conecta este servicio a una red llamada test-network, para que pueda comunicarse con mysql-db y phpmyadmin.
+      - test-network
+    volumes: >> Monta el directorio actual (.) dentro del contenedor en /usr/src/app. Sirve para tener el código actualizado sin reconstruir la imagen.
+      - .:/usr/src/app
+    depends_on: >>Asegura que primero se levante mysql-db antes de iniciar el backend (aunque no espera a que esté “lista” la base de datos).
+      - mysql-db
+    restart: always >> Si el contenedor se cae, Docker lo reinicia automáticamente.
+    stdin_open: true >> Mantiene la terminal abierta (modo interactivo). Útil para debugging.
+    tty: true       >> 
+    command: /bin/bash >> Al iniciar, el contenedor ejecuta /bin/bash en lugar de arrancar un servidor. Esto te deja en la consola del contenedor (modo manual)
+
+  mysql-db: >>  Servicio que corre la base de datos MySQL.
+    image: mysql:8.0    >> Usa una imagen oficial de MySQL versión 8.0.
+    container_name: mysql-db    >> Nombre fijo
+    restart: always             >> reinicio automático si se detiene.
+    environment:                >> Crea el usuario fran, la base testdb y le asigna la contraseña. El usuario root tendrá clave admin123.
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: fran
+      MYSQL_PASSWORD: fran123
+    ports: >> Mapea el puerto MySQL 3306 para poder conectarte desde el exterior, por ejemplo con un cliente MySQL. 
+      - "3306:3306"
+    volumes:    >> Guarda los datos de la base en un volumen persistente (mysql_data) para que no se pierdan al reiniciar.
+      - mysql_data:/var/lib/mysql
+    networks:   >> Conecta a la misma red de los otros servicios.
+      - test-network
+  
+  phpmyadmin:      >> Interfaz web para manejar la base de datos.
+    image: phpmyadmin/phpmyadmin       >> Usa la imagen oficial y se reinicia automáticamente si se cae.
+    container_name: phpmyadmin
+    restart: always
+    ports:      >> Puedes acceder desde tu navegador en localhost:8080.
+      - "8080:80"
+    environment:        >> Le indica a phpMyAdmin cómo conectarse a mysql-db.
+      PMA_HOST: mysql-db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: admin123
+    depends_on:     >>Levanta primero el contenedor de MySQL.
+      - mysql-db
+    networks:       >> Se conecta a la misma red para poder comunicarse con mysql-db.
+      - test-network
+
+volumes:        >>Define un volumen llamado mysql_data que usará MySQL para persistir sus datos.
+  mysql_data:
+
+networks:  >> Crea una red bridge (red virtual interna). Todos los contenedores conectados a esta red pueden comunicarse por nombre (mysql-db, phpmyadmin, etc.).
+  test-network:
+    name: test-network
+    driver: bridge
+
+
+Resumen del flujo
+    Se crea la red test-network.
+
+    Se crea el volumen mysql_data.
+
+    Se levanta mysql-db con una base testdb y un usuario fran.
+
+    Se levanta phpmyadmin, que se conecta a mysql-db.   
+
+    Se levanta backend, que se comunica con mysql-db usando las variables de entorno.
+
+    Puedes acceder a:
+
+        localhost:3030 → tu app backend.
+
+        localhost:8080 → phpMyAdmin para ver la base de datos.
