@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 
+require("./config/db"); // Importar la configuración de la base de datos
 const app = express();
 
 // Middlewares
