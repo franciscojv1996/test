@@ -1,12 +1,14 @@
 require('dotenv').config();
 const mysql = require('mysql');
 
-const tempConnection = mysql.createConnection({
+const databaseCredentials = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_ADMIN_USER,
     password: process.env.DB_ADMIN_PASSWORD
-});
+}
+
+const tempConnection = mysql.createConnection(databaseCredentials);
 
 tempConnection.connect((err) => {
     if (err) {
@@ -24,13 +26,7 @@ tempConnection.connect((err) => {
             }
             console.log(`✅ Base de datos ${process.env.DB_NAME} creada o ya existe`);
 
-            const connection = mysql.createConnection({
-                host: process.env.DB_HOST,
-                port: process.env.DB_PORT,
-                user: process.env.DB_ADMIN_USER,
-                password: process.env.DB_ADMIN_PASSWORD,
-                database: process.env.DB_NAME
-            });
+            const connection = mysql.createConnection({ ...databaseCredentials, database: process.env.DB_NAME });
 
             connection.connect((err) => {
                 if (err) {
