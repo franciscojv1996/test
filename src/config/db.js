@@ -1,42 +1,36 @@
-require('dotenv').config();
-const mysql = require('mysql');
+const mysql = require("mysql");
+const { db } = require("./");
 
-const databaseCredentials = {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_ADMIN_USER,
-    password: process.env.DB_ADMIN_PASSWORD
-}
+const { credentials, baseName } = db;
 
-const tempConnection = mysql.createConnection(databaseCredentials);
+const connectionCredentials = mysql.createConnection(credentials);
 
-tempConnection.connect((err) => {
+connectionCredentials.connect((err) => {
     if (err) {
-        console.error("❌ Error al conectarse a MySQL:", err.message);
+        console.error("Error al conectarse a MySQL:", err.message);
         return;
     }
-    console.log("✅ Conectado a MySQL");
+    console.log("Connected to the database");
+    connectionCredentials.query(`CREATE DATABASE IF NOT EXISTS ${baseName}`, (err) => {
+        if (err) {
+            console.error("Error creando la base de datos:", err.message);
+            return;
+        }
+        console.log(`Base de datos ${baseName} creada o ya existe.`);
 
-    tempConnection.query(
-        `CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``,
-        (err) => {
+        const connection = mysql.createConnection({
+            ...credentials,
+            database: baseName,
+        });
+        connection.connect((err) => {
             if (err) {
-                console.error("❌ Error creando la base de datos:", err.message);
+                console.error("Error al conectarse a la base de datos:", err.message);
                 return;
             }
-            console.log(`✅ Base de datos ${process.env.DB_NAME} creada o ya existe`);
+            console.log(`Conectado a la base de datos ${baseName}`);
+        });
 
-            const connection = mysql.createConnection({ ...databaseCredentials, database: process.env.DB_NAME });
-
-            connection.connect((err) => {
-                if (err) {
-                    console.error("❌ Error conectándose a la base de datos:", err.message);
-                    return;
-                }
-                console.log(`✅ Conectado a la base de datos ${process.env.DB_NAME}`);
-            });
-
-            module.exports = connection;
-        }
-    );
+        module.exports = connection;
+    });
 });
+
