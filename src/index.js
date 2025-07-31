@@ -1,11 +1,11 @@
 const server = require("./app.js");
-const connection = require("./config/db.js");
+const sequelize = require("./util/db.js");
 const { app } = require("./config");
 
 const { port, host } = app;
 
 async function startServer() {
-    await connection;
+    await sequelize;
     server.listen(port, host, () => {
         console.log(`Server is running on http://${host}:${port}`);
     });

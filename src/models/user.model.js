@@ -1,4 +1,4 @@
-const db = require("./../config/db")
+/*const db = require("../util/db")
 
 const createUser = (user, callback) => {
     const sql = 'INSERT INTO user (nombre, edad, dni) VALUES (?, ?, ?)';
@@ -15,3 +15,4 @@ const obtenerUser = (callback) => {
 module.exports = {
     createUser, obtenerUser
 }
+    */
