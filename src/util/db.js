@@ -14,14 +14,14 @@ const sequelize = new Sequelize(
     }
 )
 
-
-sequelize.sync({ ferce: false })
-    .then(() => console.log("tabla sincronizadsas"))
+sequelize.sync({ force: true })
+    .then(() => console.log("tabla sincronizadas"))
     .catch(err => {
-        //console.log("error al sincronizar", err)
         if (err.original.sqlMessage) {
-            createDatabase()
+            createDatabase() // en caso de no existir la base de datos,
         }
+
+        console.error("Error al sincronizar", err);
     })
 
-module.exports = sequelize
+module.exports = sequelize  

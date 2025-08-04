@@ -1,18 +1,42 @@
-/*const db = require("../util/db")
+const { DataTypes } = require("sequelize")
+const db = require("./../util/db")
 
-const createUser = (user, callback) => {
-    const sql = 'INSERT INTO user (nombre, edad, dni) VALUES (?, ?, ?)';
-    const values = [user.nombre, user.edad, user.dni];
+const User = db.define("User", {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
 
-    console.log('¿query es función?', typeof db.query); // ✅ debe imprimir "function"
-    db.query(sql, values, callback);
-};
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
 
-const obtenerUser = (callback) => {
-    db.query('SELECT * FROM user', callback);
-};
+    email: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+        validate: {
+            isEmail: true
+        }
+    },
 
-module.exports = {
-    createUser, obtenerUser
-}
-    */
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+
+    //Comprador = "Buyer"
+    //Almacenista = "Storekeeper"
+    //Solicitante = "Requester"
+    //Administrador = "Administrator"
+    role: {
+        type: DataTypes.ENUM("Administrator", "Requester", "Storekeeper", "Buyer")
+    },
+}, {
+    tableName: 'users',
+    timestamps: true
+})
+
+module.exports = User

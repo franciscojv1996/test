@@ -10,7 +10,6 @@ async function createDatabase() {
 
     await connection.query(`CREATE DATABASE IF NOT EXISTS ${db.baseName}`);
     console.log('Base de datos creada o ya existente');
-    await connection.end();
 
 }
 

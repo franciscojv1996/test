@@ -7,11 +7,14 @@ class Controller {
 
      create(){
         return errorHandler(async (req, res) =>{
-            console.log("hola", this.model)
-
-            return res.status(200).json({
-                message:'hola'
+            const data = req.body
+            await this.model.create(data)
+            res.status(201).json({
+                message: "User created successfully",
+                data: data
             })
+
+        
         })
     }
 
