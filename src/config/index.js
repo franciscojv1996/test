@@ -16,4 +16,9 @@ const db = {
     baseName: process.env.DB_NAME || "test",
 }
 
-module.exports = { app, db }
+jwtConfig = {
+    secret: process.env.JWT_SECRET || "default_secret",
+    expiration: process.env.JWT_EXPIRATION || "1h", // Default to 1 hour
+}
+
+module.exports = { app, db, jwtConfig }

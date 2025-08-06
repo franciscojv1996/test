@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize")
 const db = require("./../util/db")
+const UserHooks = require("./../hooks/user.hooks")
 
 const User = db.define("User", {
     id: {
@@ -34,9 +35,15 @@ const User = db.define("User", {
     role: {
         type: DataTypes.ENUM("Administrator", "Requester", "Storekeeper", "Buyer")
     },
+    
+    isActive: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+    }
 }, {
     tableName: 'users',
-    timestamps: true
+    timestamps: true,
+    hooks: UserHooks
 })
 
 module.exports = User

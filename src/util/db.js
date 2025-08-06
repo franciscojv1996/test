@@ -14,7 +14,7 @@ const sequelize = new Sequelize(
     }
 )
 
-sequelize.sync({ force: true })
+sequelize.sync({ alter: true })
     .then(() => console.log("tabla sincronizadas"))
     .catch(err => {
         if (err.original.sqlMessage) {
