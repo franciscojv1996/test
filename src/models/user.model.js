@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize")
-const db = require("./../util/db")
+const sequelize = require("./../util/db")
 const UserHooks = require("./../hooks/user.hooks")
 
-const User = db.define("User", {
+const User = sequelize.define("User", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,

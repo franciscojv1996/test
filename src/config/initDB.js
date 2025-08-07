@@ -8,9 +8,9 @@ async function createDatabase() {
         password: db.password
     })
 
-    await connection.query(`CREATE DATABASE IF NOT EXISTS ${db.baseName}`);
-    console.log('Base de datos creada o ya existente');
-
+    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${db.baseName}\`;`);
+    console.log(`✅ Base de datos '${db.baseName}' verificada o creada.`);
+    await connection.end();
 }
 
 module.exports = createDatabase

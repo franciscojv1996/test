@@ -3,20 +3,18 @@ const errorHandler = require("./../middlewares/errorHandler")
 const User = require("./../models/user.model")
 
 const bcrypt = require("bcrypt")
-const { generateToken } = require("./../util/jwt")
-
-const { jwtConfig } = require("./../config")
-const { secret, expiration } = jwtConfig
-
-
+const generateToken = require("./../util/jwt")
 class UserController extends Contorller {
     constructor() {
         super(User)
     }
 
     login() {
-        errorHandler(async (req, res) => {
+        return errorHandler(async (req, res) => {
             const { email, password } = req.body;
+
+            console.log(req.body);
+
             const user = await this.model.findOne({ where: { email } });
 
             if (!user) {
@@ -29,14 +27,17 @@ class UserController extends Contorller {
                 return res.status(401).json({ message: "Invalid password" });
             }
 
+            console.log("User logged in:", user);
+
             const token = generateToken(user);
 
             res.status(200).json({
                 message: "Login successful",
                 token: token,
                 data: user,
-                
+
             });
+
         })
     }
 }

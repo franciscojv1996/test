@@ -1,18 +1,21 @@
-const { verifyToken } = require("./../util/jwt");
+const jwt = require("jsonwebtoken");
+const { jwtConfig } = require("../config");
+const { secret, expiration } = jwtConfig;
 
-const verifyTokenMiddleware = (req, res, next) => {
+const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "No token provided" });
+        return res.status(401).json({ message: "token no proporcionado" });
     }
+
     const token = authHeader.split(" ")[1];
     try {
-        const decoded = verifyToken(token);
-        req.user = decoded; // Attach user info to request object
+        const decoded = jwt.verify(token, secret);
+        req.user = decoded;
         next();
     } catch (error) {
-        return res.status(401).json({ message: "Invalid token" });
+        return res.status(403).json({ message: "token no valido" });
     }
 }
 
-module.exports = verifyTokenMiddleware;
+module.exports = verifyToken;
