@@ -13,9 +13,12 @@ class UserController extends Contorller {
         return errorHandler(async (req, res) => {
             const { email, password } = req.body;
 
-            console.log(req.body);
 
             const user = await this.model.findOne({ where: { email } });
+
+            if (user.isActive === false) {
+                return res.status(403).json({ message: "User is inactive" });
+            }
 
             if (!user) {
                 return res.status(404).json({ message: "User no encontrado" });

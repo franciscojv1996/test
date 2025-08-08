@@ -10,8 +10,8 @@ const verifyToken = (req, res, next) => {
 
     const token = authHeader.split(" ")[1];
     try {
-        const decoded = jwt.verify(token, secret);
-        req.user = decoded;
+        const decoded = jwt.verify(token, secret, expiration);
+        req.logged = decoded;
         next();
     } catch (error) {
         return res.status(403).json({ message: "token no valido" });

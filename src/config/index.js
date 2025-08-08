@@ -21,4 +21,9 @@ jwtConfig = {
     expiration: process.env.JWT_EXPIRATION || "1h", // Default to 1 hour
 }
 
-module.exports = { app, db, jwtConfig }
+permisos = {
+    rol: ["Administrador", "Storekeeper", "Buyer", "Requester"],
+    methods: ["GET", "POST", "PUT"]
+}
+
+module.exports = { app, db, jwtConfig, permisos }

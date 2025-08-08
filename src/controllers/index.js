@@ -18,7 +18,7 @@ class Controller {
 
     getAll() {
         return errorHandler(async (req, res) => {
-            console.log(req.user);
+            console.log(req.logged);
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
             const offset = (page - 1) * limit;
